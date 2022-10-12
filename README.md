@@ -12,6 +12,37 @@
  [] Note: If the image is a duplicate name, update the object in the array, don’t just add it
   [] Upload the images.json file back to the S3 bucket
 
+## PseudoCode for next steps:
+https://docs.aws.amazon.com/lambda/latest/dg/with-s3-example.html
+
+Get the bucket name from the event object
+Get the key from the event object
+Create a new parameter object that contains both the bucket and the key
+ Use the Amazon S3 getObject API to retrieve the content type of the object. (getObject API can be replaced with any other getObject method in the AWS S3 client library)
+Save the response from above into a variable
+
+https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html
+
+Use GetObject to retrieve the images.json file from the s3 bucket
+Push the retrieved info into an array (may need to convert this to a JSON object)
+Push the new object into the array if the new object does not already exist, 
+If it does already exist, update/overwrite the data
+
+Write it to a JSON file and name it the same as the original file. 
+
+https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html
+
+Put the JSON file into the bucket, and overwrite the old JSON file.
+
+
+
+
+
+<!-- End of PseudoCode -->
+
+
+
+
 #### a description of how to use your lambda.
 
 
@@ -61,6 +92,41 @@
 - name the event (I chose imageTest for this project)
 - save the test
 
+***Video 2 of 2***
+
+3. Configure the test event
+
+- on the code tab, select the arrow dropdown and enable the test event
+- 
+
+
+4. Add a trigger
+
+- From the Code tab, select "Add a Trigger"
+- From the dropdown, select S3
+- Select the bucket
+- Fir this project, since it will be uploading images, selkect a suffix for the image file (I chose .png).
+- Select the checkbox indicating that you understand that using a single bucket can cause recursive issues that can increase costs.
+- Select "Add".
+
+5. Test that the bucket and Lambda are connected
+
+- In Lambda, select the "Monitor" tab, and then select "View Logs in Cloudwatch". Under "Log streams" a list of logs will be present. Leave thie tab open, because it will be checked after an image is uploaded to confirm that the bucket and the Lambda are connected.
+- Navigate to the bucket.
+- Navigate to the Objects tab
+- Select "Upload"
+- Select "Add Files"
+- Make sure the Type matches the type specified within the trigger's required suffix.
+- Select "Upload"
+- Navigate to the open tab that is displaying the Log Streams, and refresh the page. If the bucket and Lambda are connected, then the newly uploaded image should be logged.
+- Drill into the object to get to the name of the uploaded file. In this case it is:
+event.Records\[0].s3\['object']['key']
 
 
 
+
+
+**Notes**
+- Navigate to the test tab and select the test button to test. Logs can be accessed with the blue "log" link, and then by following the logstream link
+
+- Make sure there is a conenction between the bucket and the Lambda, then start coding.
